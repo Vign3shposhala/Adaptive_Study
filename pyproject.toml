@@ -1,0 +1,15 @@
+[project]
+name = "adaptive-study-env"
+version = "0.1.0"
+description = "OpenEnv RL environment for adaptive learning"
+authors = [
+    { name = "Valt366" }
+]
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "pydantic",
+    "openai",
+    "requests",
+    "numpy"
+]
