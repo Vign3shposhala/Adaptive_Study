@@ -1,0 +1,24 @@
+name: adaptive-study-env
+
+endpoints:
+  reset: /reset
+  step: /step
+  state: /state
+
+tasks:
+  - id: learning-efficiency
+    grader:
+      type: reward
+      normalize: true
+
+  - id: stress-control
+    grader:
+      type: state
+      metric: stress
+      minimize: true
+
+  - id: focus-optimization
+    grader:
+      type: state
+      metric: focus
+      maximize: true
