@@ -5,11 +5,16 @@ description = "OpenEnv RL environment for adaptive learning"
 authors = [
     { name = "Valt366" }
 ]
+
 dependencies = [
     "fastapi",
     "uvicorn",
     "pydantic",
     "openai",
     "requests",
-    "numpy"
+    "numpy",
+    "openenv-core>=0.2.0"
 ]
+
+[project.scripts]
+server = "server.app:app"
