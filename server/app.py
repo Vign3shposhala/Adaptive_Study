@@ -3,24 +3,45 @@ from pydantic import BaseModel
 from env import AdaptiveStudyEnv
 
 app = FastAPI()
+
 env = AdaptiveStudyEnv()
 
+
+# 🔹 Request schema
 class ActionRequest(BaseModel):
     action: str
 
+
+# 🔹 Reset endpoint
 @app.post("/reset")
 def reset():
-    return {"state": env.reset()}
+    state = env.reset()
+    return {
+        "state": state
+    }
 
+
+# 🔹 Step endpoint
 @app.post("/step")
 def step(req: ActionRequest):
-    state, reward, done, info = env.step(req.action)
-    return {"state": state, "reward": reward, "done": done, "info": info}
+    obs, reward, done, _ = env.step(req.action)
 
+    return {
+        "state": obs,
+        "reward": float(reward),
+        "done": done
+    }
+
+
+# 🔹 State endpoint
 @app.get("/state")
-def state():
-    return {"state": env.state()}
+def get_state():
+    return {
+        "state": env.state()
+    }
 
+
+# 🔥 REQUIRED FOR VALIDATOR (VERY IMPORTANT)
 def main():
     return app
 
