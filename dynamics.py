@@ -30,15 +30,21 @@ def apply_action(state, action):
 def compute_reward(prev_state, state):
     import math
 
-    focus_gain = state["focus"] - prev_state["focus"]
-    mastery_gain = state["mastery"] - prev_state["mastery"]
-    stress_penalty = state["stress"]
+    # stable features
+    focus = state["focus"]
+    mastery = state["mastery"]
+    stress = state["stress"]
 
-    raw = 0.4 * focus_gain + 0.5 * mastery_gain - 0.3 * stress_penalty
+    # bounded linear combination
+    raw = 0.4 * focus + 0.5 * mastery - 0.3 * stress
 
+    # sigmoid → guarantees (0,1)
     reward = 1 / (1 + math.exp(-raw))
 
-    # strict safe range
-    reward = max(0.01, min(0.99, reward))
+    # 🔥 CRITICAL: avoid edges COMPLETELY
+    if reward <= 0:
+        reward = 0.01
+    elif reward >= 1:
+        reward = 0.99
 
     return reward
