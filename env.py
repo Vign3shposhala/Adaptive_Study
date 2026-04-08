@@ -38,9 +38,11 @@ class AdaptiveStudyEnv:
         done = False
 
         # 🔥 SAFE SCORE (always valid)
-        info = {
-            "score": 0.3 + 0.4 * self.state["mastery"]  # always between 0.3–0.7
-        }
+       info = {
+    "score1": 0.3 + 0.4 * self.state["mastery"],
+    "score2": 0.3 + 0.4 * self.state["focus"],
+    "score3": 0.3 + 0.4 * (1 - self.state["stress"])
+}
 
         return self._get_obs(), reward, done, info
 
