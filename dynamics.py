@@ -28,18 +28,17 @@ def apply_action(state, action):
 
 
 def compute_reward(prev_state, state):
-    
+    import math
+
     focus_gain = state["focus"] - prev_state["focus"]
     mastery_gain = state["mastery"] - prev_state["mastery"]
     stress_penalty = state["stress"]
 
-    raw_reward = 0.4 * focus_gain + 0.5 * mastery_gain - 0.3 * stress_penalty
+    raw = 0.4 * focus_gain + 0.5 * mastery_gain - 0.3 * stress_penalty
 
-    
-    import math
-    reward = 1 / (1 + math.exp(-raw_reward))
+    reward = 1 / (1 + math.exp(-raw))
 
-    
+    # strict safe range
     reward = max(0.01, min(0.99, reward))
 
     return reward
