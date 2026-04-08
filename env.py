@@ -2,6 +2,7 @@ import random
 from config import ACTIONS, MAX_TIME
 from dynamics import apply_action, compute_reward
 
+
 class AdaptiveStudyEnv:
     def __init__(self):
         self.actions = ACTIONS
@@ -24,12 +25,17 @@ class AdaptiveStudyEnv:
         prev_state = self.state.copy()
         self.state = apply_action(self.state, action)
 
+        
         for key in ["focus", "energy", "mastery", "stress"]:
-            self.state[key] = max(0, min(1, self.state[key]))
+            self.state[key] = max(0.01, min(0.99, self.state[key]))
 
         self.state["time"] += 1
 
         reward = compute_reward(prev_state, self.state)
+
+    
+        reward = max(0.01, min(0.99, reward))
+
         done = self.state["time"] >= self.max_time
 
         return self._get_obs(), reward, done, {}
@@ -38,4 +44,8 @@ class AdaptiveStudyEnv:
         return self._get_obs()
 
     def _get_obs(self):
-        return self.state.copy()
+        
+        obs = self.state.copy()
+        for key in ["focus", "energy", "mastery", "stress"]:
+            obs[key] = max(0.01, min(0.99, obs[key]))
+        return obs
