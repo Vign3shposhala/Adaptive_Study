@@ -1,15 +1,22 @@
+name: adaptive-study-env
+
+endpoints:
+  reset: /reset
+  step: /step
+  state: /state
+
 tasks:
-  - id: learning
+  - id: t1
     grader:
-      type: info
-      key: score1
+      type: reward
+      normalize: false
 
-  - id: focus
+  - id: t2
     grader:
-      type: info
-      key: score2
+      type: reward
+      normalize: false
 
-  - id: stress
+  - id: t3
     grader:
-      type: info
-      key: score3
+      type: reward
+      normalize: false
