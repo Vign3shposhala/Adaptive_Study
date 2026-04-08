@@ -59,6 +59,10 @@ try:
 except Exception:
     print("[STEP] step=0 reward=0.0000")
 
-score = max(0, min(1, total_reward / 1000))
+score = total_reward / 1000
 
+if score <= 0:
+    score = 0.01
+elif score >= 1:
+    score = 0.99
 print(f"[END] final_score={score:.4f}")
