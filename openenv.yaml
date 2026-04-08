@@ -6,23 +6,17 @@ endpoints:
   state: /state
 
 tasks:
-  - id: learning-efficiency
+  - id: task1
     grader:
       type: reward
       normalize: true
-      min_score: 0.01
-      max_score: 0.99
 
-  - id: stress-control
+  - id: task2
     grader:
       type: reward
       normalize: true
-      min_score: 0.01
-      max_score: 0.99
 
-  - id: focus-optimization
+  - id: task3
     grader:
       type: reward
       normalize: true
-      min_score: 0.01
-      max_score: 0.99
