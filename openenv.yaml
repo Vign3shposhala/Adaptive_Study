@@ -10,16 +10,19 @@ tasks:
     grader:
       type: reward
       normalize: true
+      min_score: 0.01
+      max_score: 0.99
 
   - id: stress-control
     grader:
-      type: state
-      metric: stress
-      minimize: true
+      type: reward
+      normalize: true
+      min_score: 0.01
+      max_score: 0.99
 
   - id: focus-optimization
     grader:
-      type: state
-      metric: focus
-      maximize: true
-      
+      type: reward
+      normalize: true
+      min_score: 0.01
+      max_score: 0.99
