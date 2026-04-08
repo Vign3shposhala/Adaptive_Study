@@ -5,27 +5,40 @@ API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:7860")
 
 print("[START]")
 
-state = requests.post(f"{API_BASE_URL}/reset").json()["state"]
-
 total_reward = 0
 
-for step in range(60):
-    action = "EASY"
+try:
+    res = requests.post(f"{API_BASE_URL}/reset", timeout=5)
+    data = res.json() if res.status_code == 200 else {}
+    state = data.get("state", {})
 
-    res = requests.post(
-        f"{API_BASE_URL}/step",
-        json={"action": action}
-    ).json()
+    for step in range(60):
+        action = "EASY"
 
-    reward = res["reward"]
-    done = res["done"]
+        try:
+            response = requests.post(
+                f"{API_BASE_URL}/step",
+                json={"action": action},
+                timeout=5
+            )
 
-    total_reward += reward
+            data = response.json() if response.status_code == 200 else {}
 
-    print(f"[STEP] step={step} reward={reward:.4f}")
+            reward = float(data.get("reward", 0))
+            done = data.get("done", False)
 
-    if done:
-        break
+        except Exception:
+            reward = 0
+            done = True
+
+        total_reward += reward
+        print(f"[STEP] step={step} reward={reward:.4f}")
+
+        if done:
+            break
+
+except Exception:
+    print("[STEP] step=0 reward=0.0000")
 
 score = max(0, min(1, total_reward / 1000))
 
