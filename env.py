@@ -25,7 +25,7 @@ class AdaptiveStudyEnv:
         prev_state = self.state.copy()
         self.state = apply_action(self.state, action)
 
-        # 🔥 Clamp state strictly between (0,1)
+        # 🔥 Clamp state strictly inside (0,1)
         for key in ["focus", "energy", "mastery", "stress"]:
             self.state[key] = max(0.01, min(0.99, self.state[key]))
 
@@ -33,20 +33,14 @@ class AdaptiveStudyEnv:
 
         reward = compute_reward(prev_state, self.state)
 
-        # 🔥 Clamp reward strictly between (0,1)
+        # 🔥 CRITICAL: ensure reward NEVER becomes 0 or 1
         reward = max(0.01, min(0.99, reward))
 
-        # 🔥 NEVER end early (important for validator)
+        # 🔥 Keep episode running (important for trajectory)
         done = False
 
-        # 🔥 FINAL FIX: 3 independent task scores
-        info = {
-            "score1": 0.3 + 0.4 * self.state["mastery"],       # learning
-            "score2": 0.3 + 0.4 * self.state["focus"],         # focus
-            "score3": 0.3 + 0.4 * (1 - self.state["stress"])   # stress control
-        }
-
-        return self._get_obs(), reward, done, info
+        # ❌ NO info-based scoring (validator ignores it)
+        return self._get_obs(), reward, done, {}
 
     def state(self):
         return self._get_obs()
